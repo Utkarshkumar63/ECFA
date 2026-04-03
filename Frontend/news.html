@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Announcements - ECFA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🤺 ECFA</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about-us.html">About Us</a></li>
+                <li><a href="members-players.html">Members & Players</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="achivements.html">Achievements</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html" class="active">News</a></li>
+                <li><a href="contact-us.html">Contact</a></li>
+                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" style="height: 300px;">
+        <div class="hero-content">
+            <h2>News & Announcements</h2>
+            <p>Latest Updates from ECFA</p>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section style="background-color: var(--light-color); padding: 2rem 0;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <input type="text" id="searchNews" placeholder="Search news..." style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px;">
+            <select id="filterType" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="">All Types</option>
+                <option value="News">News</option>
+                <option value="Announcement">Announcement</option>
+                <option value="Event">Event</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- News Grid -->
+    <section>
+        <div class="container">
+            <h2>Latest News</h2>
+            <div id="news-container" class="news-grid"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ECFA</h3>
+                <p>East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="about-us.html">About Us</a>
+                <a href="members-players.html">Players</a>
+                <a href="events.html">Events</a>
+                <a href="gallery.html">Gallery</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>📍 East Champaran, Bihar, India</p>
+                <p>📞 +91-XXXXXXXXXX</p>
+                <p>✉️ info@ecfa.org</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let allNews = [];
+
+        async function loadNews() {
+            try {
+                const container = document.getElementById('news-container');
+                showLoading(container);
+                
+                allNews = await ApiClient.getNews();
+                
+                if (allNews.length === 0) {
+                    emptyStateMessage(container, 'No news available');
+                } else {
+                    displayNews(allNews);
+                }
+            } catch (error) {
+                console.error('Error loading news:', error);
+                showError(document.getElementById('news-container'), 'Failed to load news');
+            }
+        }
+
+        function displayNews(news) {
+            const container = document.getElementById('news-container');
+            if (news.length === 0) {
+                emptyStateMessage(container, 'No news matches your filters');
+            } else {
+                container.innerHTML = news.map(item => `
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-badge">${item.type || 'News'}</span>
+                            <h3 class="card-title">${item.title}</h3>
+                            <p class="card-text">${item.description}</p>
+                            <p class="card-date">${formatDate(item.created_at)}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function filterNews() {
+            const searchTerm = document.getElementById('searchNews').value.toLowerCase();
+            const type = document.getElementById('filterType').value;
+
+            let filtered = allNews;
+
+            if (searchTerm) {
+                filtered = filtered.filter(n => 
+                    n.title.toLowerCase().includes(searchTerm) || 
+                    n.description.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (type) {
+                filtered = filtered.filter(n => n.type === type);
+            }
+
+            displayNews(filtered);
+        }
+
+        // Event listeners for filters
+        document.getElementById('searchNews').addEventListener('input', debounce(filterNews, 300));
+        document.getElementById('filterType').addEventListener('change', filterNews);
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadNews);
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events & Tournaments - ECFA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🤺 ECFA</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about-us.html">About Us</a></li>
+                <li><a href="members-players.html">Members & Players</a></li>
+                <li><a href="events.html" class="active">Events</a></li>
+                <li><a href="achivements.html">Achievements</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact-us.html">Contact</a></li>
+                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" style="height: 300px;">
+        <div class="hero-content">
+            <h2>Events & Tournaments</h2>
+            <p>Upcoming & Past Events</p>
+        </div>
+    </section>
+
+    <!-- Tab Navigation -->
+    <section style="background-color: var(--light-color); padding: 2rem 0; text-align: center;">
+        <div class="container">
+            <button class="btn btn-secondary" onclick="showTab('upcoming')" style="margin-right: 1rem;">Upcoming Events</button>
+            <button class="btn btn-secondary" onclick="showTab('past')">Past Events</button>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section id="upcoming" class="container" style="padding: 3rem 0;">
+        <h2>Upcoming Events</h2>
+        <div id="upcoming-container" class="events-grid"></div>
+    </section>
+
+    <!-- Past Events -->
+    <section id="past" class="container" style="padding: 3rem 0; display: none;">
+        <h2>Past Events</h2>
+        <div id="past-container" class="events-grid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ECFA</h3>
+                <p>East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="about-us.html">About Us</a>
+                <a href="members-players.html">Players</a>
+                <a href="events.html">Events</a>
+                <a href="gallery.html">Gallery</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>📍 East Champaran, Bihar, India</p>
+                <p>📞 +91-XXXXXXXXXX</p>
+                <p>✉️ info@ecfa.org</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let allEvents = [];
+
+        async function loadEvents() {
+            try {
+                allEvents = await ApiClient.getEvents();
+                
+                const now = new Date();
+                const upcomingEvents = allEvents.filter(e => new Date(e.start_date) >= now);
+                const pastEvents = allEvents.filter(e => new Date(e.start_date) < now);
+
+                displayUpcomingEvents(upcomingEvents);
+                displayPastEvents(pastEvents);
+            } catch (error) {
+                console.error('Error loading events:', error);
+                showAlert('Failed to load events', 'danger');
+            }
+        }
+
+        function displayUpcomingEvents(events) {
+            const container = document.getElementById('upcoming-container');
+            if (events.length === 0) {
+                emptyStateMessage(container, 'No upcoming events scheduled');
+            } else {
+                container.innerHTML = events.map(event => `
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 class="card-title">${event.name}</h3>
+                            <p class="card-badge">Upcoming</p>
+                            <p class="card-text">${event.description}</p>
+                            <p class="card-date">📅 ${formatDate(event.start_date)} to ${formatDate(event.end_date)}</p>
+                            <p class="card-text">📍 ${event.location}</p>
+                            <p class="card-text"><strong>Capacity:</strong> ${event.max_participants || 'Unlimited'} participants</p>
+                            ${event.registration_deadline ? `<p class="card-text">Registration Deadline: ${formatDate(event.registration_deadline)}</p>` : ''}
+                            <a href="registration.html" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Register</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function displayPastEvents(events) {
+            const container = document.getElementById('past-container');
+            if (events.length === 0) {
+                emptyStateMessage(container, 'No past events');
+            } else {
+                container.innerHTML = events.map(event => `
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 class="card-title">${event.name}</h3>
+                            <p class="card-badge" style="background-color: var(--success-color);">Completed</p>
+                            <p class="card-text">${event.description}</p>
+                            <p class="card-date">📅 ${formatDate(event.start_date)} to ${formatDate(event.end_date)}</p>
+                            <p class="card-text">📍 ${event.location}</p>
+                            <a href="gallery.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">View Gallery</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function showTab(tab) {
+            document.getElementById('upcoming').style.display = tab === 'upcoming' ? 'block' : 'none';
+            document.getElementById('past').style.display = tab === 'past' ? 'block' : 'none';
+        }
+
+        // Load events on page load
+        document.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
+</body>
+</html>
+</html>

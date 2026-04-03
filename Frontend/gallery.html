@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - ECFA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🤺 ECFA</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about-us.html">About Us</a></li>
+                <li><a href="members-players.html">Members & Players</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="achivements.html">Achievements</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact-us.html">Contact</a></li>
+                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" style="height: 300px;">
+        <div class="hero-content">
+            <h2>Gallery</h2>
+            <p>Images & Videos from Our Events</p>
+        </div>
+    </section>
+
+    <!-- Lightbox for Gallery -->
+    <div id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <img id="lightboxImage" src="" alt="">
+    </div>
+
+    <!-- Gallery -->
+    <section>
+        <div class="container">
+            <h2>Gallery Items</h2>
+            <div id="gallery-container" class="gallery-grid"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ECFA</h3>
+                <p>East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="about-us.html">About Us</a>
+                <a href="members-players.html">Players</a>
+                <a href="events.html">Events</a>
+                <a href="gallery.html">Gallery</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>📍 East Champaran, Bihar, India</p>
+                <p>📞 +91-XXXXXXXXXX</p>
+                <p>✉️ info@ecfa.org</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        async function loadGallery() {
+            try {
+                const container = document.getElementById('gallery-container');
+                showLoading(container);
+                
+                const gallery = await ApiClient.getGallery();
+                
+                if (gallery.length === 0) {
+                    emptyStateMessage(container, 'No gallery items available');
+                } else {
+                    container.innerHTML = gallery.map(item => `
+                        <div class="card" onclick="openLightbox('${item.url}')">
+                            <div class="card-image" style="cursor: pointer;">
+                                <img src="${item.url}" alt="${item.title}">
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">${item.title}</h3>
+                                <p class="card-text">${item.description}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                showError(document.getElementById('gallery-container'), 'Failed to load gallery');
+            }
+        }
+
+        // Load gallery on page load
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>

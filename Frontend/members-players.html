@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members & Players - ECFA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🤺 ECFA</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about-us.html">About Us</a></li>
+                <li><a href="members-players.html" class="active">Members & Players</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="achivements.html">Achievements</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact-us.html">Contact</a></li>
+                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" style="height: 300px;">
+        <div class="hero-content" style="text-align: center;">
+            <h2>Our Players</h2>
+            <p>Meet Our Registered Members & Players</p>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section style="background-color: var(--light-color); padding: 2rem 0;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <input type="text" id="searchPlayer" placeholder="Search by name..." style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px;">
+            <select id="filterCategory" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="">All Event Types</option>
+                <option value="Épée">Épée</option>
+                <option value="Foil">Foil</option>
+                <option value="Sabre">Sabre</option>
+            </select>
+            <select id="filterCategory2" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="">All Categories</option>
+                <option value="U-8">U-8</option>
+                <option value="U-10">U-10</option>
+                <option value="U-12">U-12</option>
+                <option value="U-14">U-14</option>
+                <option value="U-17">U-17</option>
+                <option value="U-20">U-20</option>
+                <option value="Senior">Senior</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Players Grid -->
+    <section>
+        <div class="container">
+            <div id="players-container" class="players-grid"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ECFA</h3>
+                <p>East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="about-us.html">About Us</a>
+                <a href="members-players.html">Players</a>
+                <a href="events.html">Events</a>
+                <a href="gallery.html">Gallery</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>📍 East Champaran, Bihar, India</p>
+                <p>📞 +91-XXXXXXXXXX</p>
+                <p>✉️ info@ecfa.org</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let allPlayers = [];
+
+        async function loadPlayers() {
+            try {
+                const container = document.getElementById('players-container');
+                showLoading(container);
+                
+                allPlayers = await ApiClient.getPlayers();
+                
+                if (allPlayers.length === 0) {
+                    emptyStateMessage(container, 'No players registered yet');
+                } else {
+                    displayPlayers(allPlayers);
+                }
+            } catch (error) {
+                console.error('Error loading players:', error);
+                showError(document.getElementById('players-container'), 'Failed to load players');
+            }
+        }
+
+        function displayPlayers(players) {
+            const container = document.getElementById('players-container');
+            if (players.length === 0) {
+                emptyStateMessage(container, 'No players match your filters');
+            } else {
+                container.innerHTML = players.map(player => `
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 class="card-title">${player.name}</h3>
+                            <p class="card-badge">${player.category || 'N/A'}</p>
+                            <p class="card-text"><strong>Event Type:</strong> ${player.event_type || 'N/A'}</p>
+                            <p class="card-text"><strong>Gender:</strong> ${player.gender || 'N/A'}</p>
+                            <p class="card-text"><strong>Email:</strong> ${player.email}</p>
+                            <p class="card-text"><strong>Phone:</strong> ${player.phone}</p>
+                            ${player.bio ? `<p class="card-text"><strong>Bio:</strong> ${player.bio}</p>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function filterPlayers() {
+            const searchTerm = document.getElementById('searchPlayer').value.toLowerCase();
+            const eventType = document.getElementById('filterCategory').value;
+            const category = document.getElementById('filterCategory2').value;
+
+            let filtered = allPlayers;
+
+            if (searchTerm) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
+            }
+
+            if (eventType) {
+                filtered = filtered.filter(p => p.event_type === eventType);
+            }
+
+            if (category) {
+                filtered = filtered.filter(p => p.category === category);
+            }
+
+            displayPlayers(filtered);
+        }
+
+        // Event listeners for filters
+        document.getElementById('searchPlayer').addEventListener('input', debounce(filterPlayers, 300));
+        document.getElementById('filterCategory').addEventListener('change', filterPlayers);
+        document.getElementById('filterCategory2').addEventListener('change', filterPlayers);
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadPlayers);
+    </script>
+</body>
+</html>

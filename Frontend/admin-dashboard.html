@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ECFA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🤺 ECFA Admin</a>
+            <ul class="nav-menu">
+                <li><a href="#" id="adminName">Admin</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" style="height: 200px;">
+        <div class="hero-content">
+            <h2>Admin Dashboard</h2>
+            <p>Manage ECFA Operations</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section style="padding: 3rem 0;">
+        <div class="container">
+            <!-- Quick Stats -->
+            <h2>Dashboard Overview</h2>
+            <div class="quick-stats" style="margin-bottom: 3rem;">
+                <div class="stat-card">
+                    <h3 id="pending-registrations">0</h3>
+                    <p>Pending Registrations</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-players">0</h3>
+                    <p>Total Players</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-events">0</h3>
+                    <p>Total Events</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-news">0</h3>
+                    <p>News Items</p>
+                </div>
+            </div>
+
+            <!-- Admin Sections -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">👥 Manage Players</h3>
+                        <p class="card-text">View, edit, and delete player profiles</p>
+                        <a href="admin-players.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">Manage</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">📅 Manage Events</h3>
+                        <p class="card-text">Create, edit, and manage events</p>
+                        <a href="admin-events.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">Manage</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">📰 Manage News</h3>
+                        <p class="card-text">Create and manage news/announcements</p>
+                        <a href="admin-news.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">Manage</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">🏆 Manage Achievements</h3>
+                        <p class="card-text">Record and manage player achievements</p>
+                        <a href="admin-achievements.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">Manage</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">📸 Manage Gallery</h3>
+                        <p class="card-text">Upload and manage gallery images</p>
+                        <a href="admin-gallery.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">Manage</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">✅ Approve Registrations</h3>
+                        <p class="card-text">Review and approve pending registrations</p>
+                        <a href="admin-registrations.html" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">Review</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Registrations Section -->
+            <h2>Pending Registrations</h2>
+            <div id="registrations-container" class="news-grid"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        async function checkAdminAuth() {
+            const token = localStorage.getItem('ecfa_token');
+            if (!token) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+
+            try {
+                const user = await ApiClient.getCurrentUser();
+                document.getElementById('adminName').textContent = user.name || user.email;
+            } catch (error) {
+                localStorage.removeItem('ecfa_token');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        async function loadDashboardStats() {
+            try {
+                const players = await ApiClient.getPlayers();
+                const events = await ApiClient.getEvents();
+                const news = await ApiClient.getNews();
+                const registrations = await ApiClient.pendingRegistrations();
+
+                document.getElementById('pending-registrations').textContent = registrations.length;
+                document.getElementById('total-players').textContent = players.length;
+                document.getElementById('total-events').textContent = events.length;
+                document.getElementById('total-news').textContent = news.length;
+
+                // Display pending registrations
+                const container = document.getElementById('registrations-container');
+                if (registrations.length === 0) {
+                    emptyStateMessage(container, 'No pending registrations');
+                } else {
+                    container.innerHTML = registrations.slice(0, 5).map(reg => `
+                        <div class="card">
+                            <div class="card-content">
+                                <h3 class="card-title">${reg.player_name}</h3>
+                                <p class="card-text"><strong>Email:</strong> ${reg.email}</p>
+                                <p class="card-text"><strong>Phone:</strong> ${reg.phone}</p>
+                                <p class="card-text"><strong>Category:</strong> ${reg.category}</p>
+                                <p class="card-badge">Pending Review</p>
+                                <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-primary" onclick="approveRegistration(${reg.id})">Approve</button>
+                                    <button class="btn btn-secondary" onclick="rejectRegistration(${reg.id})">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showAlert('Failed to load dashboard data', 'danger');
+            }
+        }
+
+        async function approveRegistration(id) {
+            try {
+                await ApiClient.approveRegistration(id);
+                showAlert('Registration approved!', 'success');
+                loadDashboardStats();
+            } catch (error) {
+                showAlert('Failed to approve registration', 'danger');
+            }
+        }
+
+        async function rejectRegistration(id) {
+            if (confirm('Are you sure you want to reject this registration?')) {
+                try {
+                    await ApiClient.rejectRegistration(id);
+                    showAlert('Registration rejected!', 'success');
+                    loadDashboardStats();
+                } catch (error) {
+                    showAlert('Failed to reject registration', 'danger');
+                }
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
+            loadDashboardStats();
+        });
+    </script>
+</body>
+</html>

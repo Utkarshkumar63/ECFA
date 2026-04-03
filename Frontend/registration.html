@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Registration - ECFA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🤺 ECFA</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about-us.html">About Us</a></li>
+                <li><a href="members-players.html">Members & Players</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="achivements.html">Achievements</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact-us.html">Contact</a></li>
+                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <h1>Player Registration</h1>
+        <p>Join ECFA & Start Your Fencing Journey</p>
+    </section>
+
+    <section class="registration-container container">
+        <div class="registration-form-wrapper">
+            <form id="playerRegistrationForm" class="registration-form" method="POST" action="http://localhost:8000/api/register">
+                <div class="form-section">
+                    <h3>Personal Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                        <span class="error-message" id="nameError"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth *</label>
+                            <input type="date" id="dob" name="dob" required>
+                            <span class="error-message" id="dobError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span class="error-message" id="genderError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                            <span class="error-message" id="phoneError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Address Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                        <span class="error-message" id="addressError"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State *</label>
+                            <input type="text" id="state" name="state" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode *</label>
+                            <input type="text" id="pincode" name="pincode" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Fencing Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">Fencing Category *</label>
+                            <select id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Epee">Epee</option>
+                                <option value="Foil">Foil</option>
+                                <option value="Sabre">Sabre</option>
+                            </select>
+                            <span class="error-message" id="categoryError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="ageGroup">Age Group *</label>
+                            <select id="ageGroup" name="ageGroup" required>
+                                <option value="">Select Age Group</option>
+                                <option value="U-14">Under 14</option>
+                                <option value="U-17">Under 17</option>
+                                <option value="U-20">Under 20</option>
+                                <option value="Senior">Senior</option>
+                            </select>
+                            <span class="error-message" id="ageGroupError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="events">Interested Events (Select multiple)</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="events" value="Epee Championship"> Epee Championship
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="events" value="Foil Championship"> Foil Championship
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="events" value="Sabre Championship"> Sabre Championship
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="events" value="Team Event"> Team Event
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Experience Level *</label>
+                        <select id="experience" name="experience" required>
+                            <option value="">Select Experience Level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                            <option value="Professional">Professional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-group checkbox">
+                        <label for="agree">
+                            <input type="checkbox" id="agree" name="agree" required>
+                            I agree to the Terms and Conditions *
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <label for="newsletter">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            Subscribe to our newsletter for updates
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Register Now</button>
+                    <button type="reset" class="btn-reset">Clear Form</button>
+                </div>
+
+                <div id="successMessage" class="success-message" style="display:none;">
+                    ✅ Registration submitted successfully! Admin approval is pending.
+                </div>
+            </form>
+
+            <div class="registration-info">
+                <h3>Registration Information</h3>
+                <div class="info-box">
+                    <h4>📋 What happens after registration?</h4>
+                    <ul>
+                        <li>Your registration will be reviewed by our admin team</li>
+                        <li>You'll receive an email confirmation</li>
+                        <li>Upon approval, you can access member portal</li>
+                        <li>You'll be able to register for tournaments</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>❓ Frequently Asked Questions</h4>
+                    <ul>
+                        <li><strong>When will I get approval?</strong> Within 24-48 hours</li>
+                        <li><strong>Is there any registration fee?</strong> Check with admin</li>
+                        <li><strong>Can I change my category later?</strong> Yes, with admin approval</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="footer-section">
+                <h4>About ECFA</h4>
+                <p>Dedicated to promoting fencing excellence in East Champaran region.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/form-validation.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
