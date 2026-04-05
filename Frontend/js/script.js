@@ -1,49 +1,41 @@
 /* ==================== NAVIGATION ==================== */
-document.addEventListener('DOMContentLoaded', function() {
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    
-    if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('ecfa-nav-toggle');
+    const panel = document.getElementById('ecfa-nav-panel');
+
+    if (toggle && panel) {
+        toggle.addEventListener('click', function () {
+            panel.classList.toggle('hidden');
+            const expanded = !panel.classList.contains('hidden');
+            toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        });
+
+        panel.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                if (window.innerWidth < 768) {
+                    panel.classList.add('hidden');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
         });
     }
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            navMenu.classList.remove('active');
-            
-            // Mark active navigation item
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
 
-    // Set active nav based on current page
-    setActiveNavigation();
-    
-    // Check admin login status
+    var lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
+
     checkAdminStatus();
 });
 
-function setActiveNavigation() {
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-            link.classList.add('active');
-        }
-    });
-}
-
-/* ==================== ADMIN AUTHENTICATION ==================== */
 function checkAdminStatus() {
     const token = localStorage.getItem('ecfa_token');
-    const adminLoginLink = document.querySelector('.admin-login a');
-    
+    const adminLoginLink = document.querySelector('[data-ecfa-admin-link]');
+
     if (token && adminLoginLink) {
         adminLoginLink.href = 'admin-dashboard.html';
         adminLoginLink.textContent = 'Admin Panel';
@@ -59,7 +51,6 @@ async function logout() {
         window.location.href = 'admin-login.html';
     } catch (error) {
         alert('Error logging out');
-        // Force logout even if API fails
         localStorage.removeItem('ecfa_token');
         localStorage.removeItem('admin_user');
     }
@@ -69,57 +60,61 @@ async function logout() {
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
-        modal.classList.add('active');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
 }
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
-        modal.classList.remove('active');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
 }
 
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
+document.addEventListener('click', function (event) {
+    document.querySelectorAll('[data-ecfa-modal]').forEach(function (modal) {
         if (event.target === modal) {
-            modal.classList.remove('active');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
     });
 });
 
-// Modal close buttons
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     if (event.target.classList.contains('close-btn')) {
-        const modal = event.target.closest('.modal');
+        const modal = event.target.closest('[data-ecfa-modal]');
         if (modal) {
-            modal.classList.remove('active');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
     }
 });
 
-/* ==================== LIGHTBOX FUNCTIONALITY ==================== */
+/* ==================== LIGHTBOX ==================== */
 function openLightbox(imageSrc) {
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightboxImage');
-    
+
     if (lightbox && lightboxImage) {
         lightboxImage.src = imageSrc;
-        lightbox.classList.add('active');
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex', 'items-center', 'justify-center');
+        document.body.classList.add('overflow-hidden');
     }
 }
 
 function closeLightbox() {
     const lightbox = document.getElementById('lightbox');
     if (lightbox) {
-        lightbox.classList.remove('active');
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex', 'items-center', 'justify-center');
+        document.body.classList.remove('overflow-hidden');
     }
 }
 
-// Lightbox keyboard navigation
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
         closeLightbox();
     }
@@ -127,39 +122,56 @@ document.addEventListener('keydown', function(event) {
 
 /* ==================== DATA LOADING ==================== */
 function showLoading(element) {
-    element.innerHTML = '<div class="loading"></div><p>Loading...</p>';
+    element.innerHTML =
+        '<div class="flex flex-col items-center justify-center gap-3 py-16 text-slate-500">' +
+        '<div class="h-10 w-10 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>' +
+        '<p class="text-sm font-medium">Loading...</p></div>';
 }
 
-function showError(element, message = 'Failed to load data') {
-    element.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+function showError(element, message) {
+    message = message || 'Failed to load data';
+    element.innerHTML =
+        '<div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-800">' +
+        message +
+        '</div>';
 }
 
-function emptyStateMessage(element, message = 'No data available') {
-    element.innerHTML = `<div class="alert alert-info">${message}</div>`;
+function emptyStateMessage(element, message) {
+    message = message || 'No data available';
+    element.innerHTML =
+        '<div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm font-medium text-slate-600">' +
+        message +
+        '</div>';
 }
 
 /* ==================== ALERT SYSTEM ==================== */
-function showAlert(message, type = 'info') {
-    const alertBox = document.createElement('div');
-    alertBox.className = `alert alert-${type}`;
+function showAlert(message, type) {
+    type = type || 'info';
+    var styles = {
+        info: 'border-blue-200 bg-blue-50 text-blue-900',
+        success: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+        danger: 'border-red-200 bg-red-50 text-red-900',
+    };
+    var style = styles[type] || styles.info;
+    var alertBox = document.createElement('div');
+    alertBox.className =
+        'fixed right-4 top-20 z-[200] max-w-sm rounded-xl border px-4 py-3 text-sm font-medium shadow-lg ' + style;
     alertBox.textContent = message;
-    alertBox.style.animation = 'slideDown 0.3s ease';
-    
-    const container = document.querySelector('.container') || document.body;
-    container.insertBefore(alertBox, container.firstChild);
-    
-    // Auto-remove alert after 5 seconds
-    setTimeout(() => {
+    document.body.appendChild(alertBox);
+
+    setTimeout(function () {
         alertBox.remove();
     }, 5000);
 }
 
 /* ==================== FORM UTILITIES ==================== */
 function getFormData(formElement) {
-    const formData = new FormData(formElement);
-    const data = {};
-    
-    for (let [key, value] of formData.entries()) {
+    var formData = new FormData(formElement);
+    var data = {};
+
+    for (var pair of formData.entries()) {
+        var key = pair[0];
+        var value = pair[1];
         if (data[key]) {
             if (!Array.isArray(data[key])) {
                 data[key] = [data[key]];
@@ -169,146 +181,164 @@ function getFormData(formElement) {
             data[key] = value;
         }
     }
-    
+
     return data;
 }
 
 function resetForm(formElement) {
     formElement.reset();
-    formElement.querySelectorAll('.error-message').forEach(el => el.remove());
+    formElement.querySelectorAll('.error-message').forEach(function (el) {
+        el.remove();
+    });
 }
 
 function showFormErrors(formElement, errors) {
-    // Clear previous errors
-    formElement.querySelectorAll('.error-message').forEach(el => el.remove());
-    
-    // Show new errors
-    for (let [field, message] of Object.entries(errors)) {
-        const input = formElement.elements[field];
+    formElement.querySelectorAll('.error-message').forEach(function (el) {
+        el.remove();
+    });
+
+    for (var field in errors) {
+        if (!Object.prototype.hasOwnProperty.call(errors, field)) continue;
+        var message = errors[field];
+        var input = formElement.elements[field];
         if (input) {
-            const errorElement = document.createElement('span');
-            errorElement.className = 'error-message';
+            var errorElement = document.createElement('span');
+            errorElement.className = 'error-message mt-1 block text-sm text-red-600';
             errorElement.textContent = Array.isArray(message) ? message[0] : message;
             input.parentElement.appendChild(errorElement);
-            input.style.borderColor = 'var(--danger-color)';
+            input.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
         }
     }
 }
 
 function clearFormErrors(formElement) {
-    formElement.querySelectorAll('.error-message').forEach(el => el.remove());
-    formElement.querySelectorAll('input, select, textarea').forEach(el => {
-        el.style.borderColor = 'var(--border-color)';
+    formElement.querySelectorAll('.error-message').forEach(function (el) {
+        el.remove();
+    });
+    formElement.querySelectorAll('input, select, textarea').forEach(function (el) {
+        el.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
     });
 }
 
 /* ==================== PAGINATION ==================== */
 function createPagination(currentPage, totalPages, onPageChange) {
-    const html = `
-        <div class="pagination" style="text-align: center; margin-top: 2rem; gap: 0.5rem; display: flex; justify-content: center; flex-wrap: wrap;">
-            ${currentPage > 1 ? `<button onclick="onPageChange(${currentPage - 1})" class="btn btn-secondary">Previous</button>` : ''}
-            <span style="display: flex; align-items: center; padding: 0.5rem 1rem;">Page ${currentPage} of ${totalPages}</span>
-            ${currentPage < totalPages ? `<button onclick="onPageChange(${currentPage + 1})" class="btn btn-secondary">Next</button>` : ''}
-        </div>
-    `;
-    return html;
+    return (
+        '<div class="mt-8 flex flex-wrap items-center justify-center gap-2">' +
+        (currentPage > 1
+            ? '<button type="button" onclick="onPageChange(' +
+              (currentPage - 1) +
+              ')" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">Previous</button>'
+            : '') +
+        '<span class="flex items-center px-3 py-2 text-sm text-slate-600">Page ' +
+        currentPage +
+        ' of ' +
+        totalPages +
+        '</span>' +
+        (currentPage < totalPages
+            ? '<button type="button" onclick="onPageChange(' +
+              (currentPage + 1) +
+              ')" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50">Next</button>'
+            : '') +
+        '</div>'
+    );
 }
 
 /* ==================== DATE FORMATTING ==================== */
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    var date = new Date(dateString);
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
 
 function formatDateTime(dateString) {
-    const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    var date = new Date(dateString);
+    var options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return date.toLocaleDateString('en-US', options);
 }
 
 /* ==================== SEARCH/FILTER ==================== */
 function debounce(func, delay) {
-    let timeoutId;
-    return function(...args) {
+    var timeoutId;
+    return function () {
+        var args = arguments;
+        var ctx = this;
         clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => func(...args), delay);
+        timeoutId = setTimeout(function () {
+            func.apply(ctx, args);
+        }, delay);
     };
 }
 
 function filterArray(array, searchTerm, searchFields) {
     if (!searchTerm.trim()) return array;
-    
-    const term = searchTerm.toLowerCase();
-    return array.filter(item => 
-        searchFields.some(field => {
-            const value = item[field];
+
+    var term = searchTerm.toLowerCase();
+    return array.filter(function (item) {
+        return searchFields.some(function (field) {
+            var value = item[field];
             return value && value.toString().toLowerCase().includes(term);
-        })
-    );
+        });
+    });
 }
 
 /* ==================== VALIDATION ==================== */
 function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function validatePhone(phone) {
-    const re = /^[0-9]{10}$/;
-    return re.test(phone.replace(/\D/g, ''));
+    return /^[0-9]{10}$/.test(phone.replace(/\D/g, ''));
 }
 
-function validateAge(birthDate, minAge = 8) {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    
+function validateAge(birthDate, minAge) {
+    minAge = minAge || 8;
+    var today = new Date();
+    var birth = new Date(birthDate);
+    var age = today.getFullYear() - birth.getFullYear();
+    var monthDiff = today.getMonth() - birth.getMonth();
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
         age--;
     }
-    
+
     return age >= minAge;
 }
 
 /* ==================== EXPORT DATA ==================== */
-function exportToCSV(data, filename = 'export.csv') {
+function exportToCSV(data, filename) {
+    filename = filename || 'export.csv';
     if (!data || data.length === 0) {
         alert('No data to export');
         return;
     }
-    
-    const headers = Object.keys(data[0]);
-    const csv = [
+
+    var headers = Object.keys(data[0]);
+    var csv = [
         headers.join(','),
-        ...data.map(row => 
-            headers.map(header => {
-                const value = row[header];
-                // Escape quotes and wrap in quotes if contains comma
-                const escaped = String(value || '').replace(/"/g, '""');
-                return escaped.includes(',') ? `"${escaped}"` : escaped;
-            }).join(',')
-        )
+        ...data.map(function (row) {
+            return headers
+                .map(function (header) {
+                    var value = row[header];
+                    var escaped = String(value || '').replace(/"/g, '""');
+                    return escaped.includes(',') ? '"' + escaped + '"' : escaped;
+                })
+                .join(',');
+        }),
     ].join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
     a.href = url;
     a.download = filename;
     a.click();
     window.URL.revokeObjectURL(url);
 }
 
-/* ==================== INITIALIZE PAGE ==================== */
 function initializePage() {
-    // This function can be called from individual pages
-    // to perform common initialization tasks
     console.log('Page initialized');
 }
 
-// Call on page load
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializePage);
 } else {

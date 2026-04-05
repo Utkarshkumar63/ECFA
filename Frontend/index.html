@@ -4,130 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>East Champaran Fencing Association - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                },
+            },
+        };
+    </script>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="bg-slate-900/95 backdrop-blur text-white sticky top-0 z-50 shadow-2xl">
-        <div class="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between gap-4">
-            <a href="index.html" class="text-2xl font-extrabold tracking-tight text-amber-300">🤺 ECFA</a>
-            <ul class="hidden md:flex items-center gap-5 text-sm font-medium">
-                <li><a href="index.html" class="text-amber-300 border-b-2 border-amber-300 pb-1">Home</a></li>
-                <li><a href="about-us.html" class="text-slate-100 hover:text-amber-200 transition">About Us</a></li>
-                <li><a href="members-players.html" class="text-slate-100 hover:text-amber-200 transition">Members & Players</a></li>
-                <li><a href="events.html" class="text-slate-100 hover:text-amber-200 transition">Events</a></li>
-                <li><a href="achivements.html" class="text-slate-100 hover:text-amber-200 transition">Achievements</a></li>
-                <li><a href="gallery.html" class="text-slate-100 hover:text-amber-200 transition">Gallery</a></li>
-                <li><a href="news.html" class="text-slate-100 hover:text-amber-200 transition">News</a></li>
-                <li><a href="contact-us.html" class="text-slate-100 hover:text-amber-200 transition">Contact</a></li>
-                <li><a href="admin-login.html" class="px-4 py-2 rounded-lg bg-amber-400 text-slate-900 font-semibold hover:bg-amber-300 transition">Admin Login</a></li>
-            </ul>
-            <button class="md:hidden p-2 rounded bg-slate-800/70 hover:bg-slate-700" aria-label="Menu">☰</button>
-                <span></span>
-                <span></span>
-                <span></span>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <nav class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-900/95 text-white shadow-xl backdrop-blur">
+        <div class="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+            <a href="index.html" class="flex shrink-0 items-center rounded-xl bg-white px-3 py-2.5 shadow-lg shadow-black/35 ring-2 ring-white focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400/70">
+                <img src="logo.jpeg" alt="East Champaran Fencing Association" class="h-12 w-auto object-contain object-left sm:h-14 md:h-16 max-w-[min(calc(100vw-6rem),380px)] sm:max-w-[420px] md:max-w-[min(520px,calc(100vw-22rem))]" width="520" height="173" decoding="async">
+            </a>
+            <button type="button" id="ecfa-nav-toggle" class="rounded-lg bg-slate-800 p-2 text-white hover:bg-slate-700 md:hidden" aria-expanded="false" aria-controls="ecfa-nav-panel" aria-label="Open menu">☰</button>
+            <div id="ecfa-nav-panel" class="hidden w-full md:block md:w-auto">
+                <ul class="flex flex-col gap-1 border-t border-slate-800 pt-4 text-sm font-medium md:flex-row md:items-center md:gap-5 md:border-0 md:pt-0">
+                    <li><a href="index.html" class="block rounded-lg px-3 py-2 text-amber-300 md:inline md:border-b-2 md:border-amber-300 md:pb-1 md:pt-0">Home</a></li>
+                    <li><a href="about-us.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">About Us</a></li>
+                    <li><a href="members-players.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Members &amp; Players</a></li>
+                    <li><a href="events.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Events</a></li>
+                    <li><a href="achivements.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Achievements</a></li>
+                    <li><a href="gallery.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Gallery</a></li>
+                    <li><a href="news.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">News</a></li>
+                    <li><a href="contact-us.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Contact</a></li>
+                    <li><a href="learn.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Learn</a></li>
+                    <li><a href="player-login.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Player Login</a></li>
+                    <li class="md:ml-2"><a href="admin-login.html" data-ecfa-admin-link class="block rounded-lg bg-amber-400 px-4 py-2.5 text-center font-semibold text-slate-900 hover:bg-amber-300 md:inline-block">Admin Login</a></li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Banner -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-slate-900 text-white">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.17),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(248,113,113,0.18),transparent_45%)]"></div>
-        <div class="relative mx-auto max-w-6xl px-4 py-24 md:py-32 text-center">
-            <h2 class="text-4xl md:text-6xl font-extrabold tracking-tight">Welcome to ECFA</h2>
-            <p class="mt-4 text-lg md:text-2xl text-slate-200">East Champaran Fencing Association</p>
-            <a href="registration.html" class="mt-8 inline-block rounded-full bg-amber-400 px-8 py-3 text-slate-900 font-semibold shadow-lg hover:scale-105 transition transform">Register Now</a>
+    <section class="relative flex min-h-[calc(100dvh-5rem)] flex-col justify-center overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-slate-900 text-white sm:min-h-[calc(100dvh-4.5rem)]">
+        <!-- Logo full-screen cover (poora hero bhar de) -->
+        <div class="pointer-events-none absolute inset-0 z-0 bg-center bg-no-repeat opacity-[0.24] mix-blend-soft-light sm:opacity-[0.28] md:opacity-[0.32]" style="background-image: url('logo.jpeg'); background-size: cover; background-position: center center;" aria-hidden="true"></div>
+        <div class="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.17),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(248,113,113,0.18),transparent_45%)]"></div>
+        <div class="relative z-10 mx-auto w-full max-w-6xl px-4 py-16 text-center md:py-20">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300/90">Foil · Epee · Sabre</p>
+            <h1 class="mt-4 text-4xl font-extrabold tracking-tight md:text-6xl">Welcome to ECFA</h1>
+            <p class="mt-4 text-lg text-slate-200 md:text-2xl">East Champaran Fencing Association</p>
+            <a href="registration.html" class="mt-10 inline-block rounded-full bg-amber-400 px-8 py-3.5 font-semibold text-slate-900 shadow-lg transition hover:scale-[1.02] hover:bg-amber-300">Register Now</a>
         </div>
     </section>
 
-    <!-- Quick Stats -->
     <section class="bg-white py-16">
-        <div class="mx-auto max-w-6xl px-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-md">
-                <h3 id="players-count" class="text-5xl font-black text-blue-700">0</h3>
+        <div class="mx-auto grid max-w-6xl gap-6 px-4 text-center md:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-8 shadow-md">
+                <h2 id="players-count" class="text-5xl font-black text-blue-700">0</h2>
                 <p class="mt-2 text-lg font-semibold text-slate-600">Active Players</p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-md">
-                <h3 id="events-count" class="text-5xl font-black text-blue-700">0</h3>
+            <div class="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-8 shadow-md">
+                <h2 id="events-count" class="text-5xl font-black text-blue-700">0</h2>
                 <p class="mt-2 text-lg font-semibold text-slate-600">Events</p>
             </div>
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-md">
-                <h3 id="achievements-count" class="text-5xl font-black text-blue-700">0</h3>
+            <div class="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-8 shadow-md">
+                <h2 id="achievements-count" class="text-5xl font-black text-blue-700">0</h2>
                 <p class="mt-2 text-lg font-semibold text-slate-600">Achievements</p>
             </div>
         </div>
     </section>
 
-    <!-- Latest News -->
     <section class="bg-slate-100 py-16">
         <div class="mx-auto max-w-6xl px-4">
-            <h2 class="text-3xl font-bold text-slate-900">Latest News & Updates</h2>
+            <h2 class="text-3xl font-bold text-slate-900">Latest News &amp; Updates</h2>
             <div id="news-container" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
-            <div class="mt-8 text-center">
-                <a href="news.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:opacity-90 transition">View All News</a>
+            <div class="mt-10 text-center">
+                <a href="news.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90">View All News</a>
             </div>
         </div>
     </section>
 
-    <!-- Upcoming Events -->
     <section class="bg-white py-16">
         <div class="mx-auto max-w-6xl px-4">
             <h2 class="text-3xl font-bold text-slate-900">Upcoming Events</h2>
             <div id="events-container" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
-            <div class="mt-8 text-center">
-                <a href="events.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:opacity-90 transition">View All Events</a>
+            <div class="mt-10 text-center">
+                <a href="events.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90">View All Events</a>
             </div>
         </div>
     </section>
 
-    <!-- Featured Achievements -->
     <section class="bg-slate-100 py-16">
         <div class="mx-auto max-w-6xl px-4">
             <h2 class="text-3xl font-bold text-slate-900">Recent Achievements</h2>
             <div id="achievements-container" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
-            <div class="mt-8 text-center">
-                <a href="achivements.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:opacity-90 transition">View All Achievements</a>
+            <div class="mt-10 text-center">
+                <a href="achivements.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90">View All Achievements</a>
             </div>
         </div>
     </section>
 
-    <!-- Gallery Preview -->
     <section class="bg-white py-16">
         <div class="mx-auto max-w-6xl px-4">
             <h2 class="text-3xl font-bold text-slate-900">Gallery Preview</h2>
             <div id="gallery-container" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
-            <div class="mt-8 text-center">
-                <a href="gallery.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:opacity-90 transition">View Full Gallery</a>
+            <div class="mt-10 text-center">
+                <a href="gallery.html" class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90">View Full Gallery</a>
             </div>
         </div>
     </section>
 
-    <!-- Lightbox for Gallery -->
-    <div id="lightbox">
-        <button class="lightbox-close" onclick="closeLightbox()">×</button>
-        <img id="lightboxImage" src="" alt="">
+    <div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/90 p-6" role="dialog" aria-modal="true" aria-label="Image preview">
+        <button type="button" class="absolute right-6 top-6 rounded-full bg-white/10 px-4 py-2 text-2xl font-light text-white hover:bg-white/20" onclick="closeLightbox()" aria-label="Close">&times;</button>
+        <img id="lightboxImage" src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain shadow-2xl">
     </div>
 
-    <!-- Call to Action -->
-    <section class="bg-gradient-to-r from-amber-500 to-blue-800 text-white py-16">
-        <div class="mx-auto max-w-6xl px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-extrabold">Join ECFA Today</h2>
-            <p class="mt-4 text-lg md:text-xl text-white/90">Start your fencing journey with us</p>
-            <a href="registration.html" class="mt-6 inline-block rounded-full bg-white text-slate-900 px-8 py-3 font-semibold shadow-lg hover:scale-105 transition">Register as a Player</a>
+    <section class="relative flex min-h-[38vh] flex-col justify-center overflow-hidden bg-gradient-to-r from-amber-500 via-amber-600 to-blue-800 py-16 text-white md:min-h-[42vh]">
+        <div class="pointer-events-none absolute inset-0 z-0 bg-center bg-no-repeat opacity-[0.16] mix-blend-overlay sm:opacity-[0.2] md:opacity-[0.22]" style="background-image: url('logo.jpeg'); background-size: cover; background-position: center center;" aria-hidden="true"></div>
+        <div class="relative z-10 mx-auto max-w-6xl px-4 text-center">
+            <h2 class="text-3xl font-extrabold md:text-4xl">Join ECFA Today</h2>
+            <p class="mt-4 text-lg text-white/90 md:text-xl">Start your fencing journey with us</p>
+            <a href="registration.html" class="mt-8 inline-block rounded-full bg-white px-8 py-3.5 font-semibold text-slate-900 shadow-lg transition hover:scale-[1.02]">Register as a Player</a>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-100 py-14">
-        <div class="mx-auto max-w-6xl px-4 grid gap-10 md:grid-cols-3">
+    <footer class="bg-slate-900 py-14 text-slate-100">
+        <div class="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-3">
             <div>
                 <h3 class="text-xl font-bold">About ECFA</h3>
                 <p class="mt-3 text-slate-300">East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
-                <div class="mt-4 flex items-center gap-2 text-white/90">
-                    <a href="#" class="rounded-full bg-slate-800 px-3 py-2">f</a>
-                    <a href="#" class="rounded-full bg-slate-800 px-3 py-2">📷</a>
-                    <a href="#" class="rounded-full bg-slate-800 px-3 py-2">𝕏</a>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <a href="#" class="rounded-full bg-slate-800 px-3 py-2 text-sm transition hover:bg-slate-700">f</a>
+                    <a href="#" class="rounded-full bg-slate-800 px-3 py-2 text-sm transition hover:bg-slate-700">📷</a>
+                    <a href="#" class="rounded-full bg-slate-800 px-3 py-2 text-sm transition hover:bg-slate-700">𝕏</a>
                 </div>
             </div>
             <div>
@@ -142,8 +149,8 @@
             <div>
                 <h3 class="text-xl font-bold">Contact</h3>
                 <p class="mt-3 text-slate-300">📍 East Champaran, Bihar, India</p>
-                <p class="text-slate-300">📞 +91-XXXXXXXXXX</p>
-                <p class="text-slate-300">✉️ info@ecfa.org</p>
+                <p class="text-slate-300">📞 9772960842</p>
+                <p class="text-slate-300">✉️ ecfamotihari@gmail.com</p>
             </div>
         </div>
         <div class="mt-10 border-t border-slate-800 pt-5 text-center text-sm text-slate-400">&copy; 2026 East Champaran Fencing Association. All rights reserved.</div>
@@ -154,25 +161,22 @@
     <script>
         async function loadDashboard() {
             try {
-                // Load stats
                 const players = await ApiClient.getPlayers();
                 const events = await ApiClient.getEvents();
                 const achievements = await ApiClient.getAchievements();
                 const news = await ApiClient.getNews();
                 const gallery = await ApiClient.getGallery();
 
-                // Update stat cards
                 document.getElementById('players-count').textContent = players.length;
                 document.getElementById('events-count').textContent = events.length;
                 document.getElementById('achievements-count').textContent = achievements.length;
 
-                // Load latest news (first 3)
                 const newsContainer = document.getElementById('news-container');
                 if (news.length === 0) {
                     emptyStateMessage(newsContainer, 'No news available');
                 } else {
                     newsContainer.innerHTML = news.slice(0, 3).map(item => `
-                        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow hover:shadow-lg transition">
+                        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-md transition hover:border-blue-200 hover:shadow-lg">
                             <header>
                                 <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">${item.type || 'News'}</span>
                                 <h3 class="mt-3 text-xl font-bold text-slate-900">${item.title}</h3>
@@ -183,13 +187,12 @@
                     `).join('');
                 }
 
-                // Load upcoming events (first 3)
                 const eventsContainer = document.getElementById('events-container');
                 if (events.length === 0) {
                     emptyStateMessage(eventsContainer, 'No events scheduled');
                 } else {
                     eventsContainer.innerHTML = events.slice(0, 3).map(event => `
-                        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow hover:shadow-lg transition">
+                        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-md transition hover:border-blue-200 hover:shadow-lg">
                             <h3 class="text-xl font-bold text-slate-900">${event.name}</h3>
                             <p class="mt-2 text-sm text-slate-600">${event.description.substring(0, 80)}...</p>
                             <p class="mt-3 text-xs text-slate-400">📅 ${formatDate(event.start_date)}</p>
@@ -198,16 +201,15 @@
                     `).join('');
                 }
 
-                // Load achievements (first 3)
                 const achievementsContainer = document.getElementById('achievements-container');
                 if (achievements.length === 0) {
                     emptyStateMessage(achievementsContainer, 'No achievements yet');
                 } else {
                     achievementsContainer.innerHTML = achievements.slice(0, 3).map(achievement => `
-                        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow hover:shadow-lg transition">
-                            <div class="flex items-center justify-between">
+                        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-md transition hover:border-blue-200 hover:shadow-lg">
+                            <div class="flex items-center justify-between gap-2">
                                 <h3 class="text-xl font-bold text-slate-900">${achievement.title}</h3>
-                                <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">${achievement.medal_type || 'Achievement'}</span>
+                                <span class="shrink-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">${achievement.medal_type || 'Achievement'}</span>
                             </div>
                             <p class="mt-2 text-sm text-slate-600">${achievement.description}</p>
                             <p class="mt-3 text-xs text-slate-400">Player: ${achievement.player?.name || 'Unknown'}</p>
@@ -215,13 +217,12 @@
                     `).join('');
                 }
 
-                // Load gallery (first 4)
                 const galleryContainer = document.getElementById('gallery-container');
                 if (gallery.length === 0) {
                     emptyStateMessage(galleryContainer, 'No gallery items');
                 } else {
                     galleryContainer.innerHTML = gallery.slice(0, 4).map(item => `
-                        <article class="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow hover:shadow-xl transition" onclick="openLightbox('${item.url}')">
+                        <article class="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition hover:shadow-xl" onclick="openLightbox('${item.url}')">
                             <img src="${item.url}" alt="${item.title}" class="h-52 w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             <div class="p-4">
                                 <h3 class="text-lg font-semibold text-slate-900">${item.title}</h3>
@@ -236,7 +237,6 @@
             }
         }
 
-        // Load dashboard on page load
         document.addEventListener('DOMContentLoaded', loadDashboard);
     </script>
 </body>

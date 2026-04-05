@@ -4,141 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - ECFA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } };
+    </script>
 </head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">🤺 ECFA</a>
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about-us.html">About Us</a></li>
-                <li><a href="members-players.html">Members & Players</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="achivements.html">Achievements</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="contact-us.html" class="active">Contact</a></li>
-                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <nav class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-900/95 text-white shadow-xl backdrop-blur">
+        <div class="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+            <a href="index.html" class="flex shrink-0 items-center rounded-xl bg-white px-3 py-2.5 shadow-lg shadow-black/35 ring-2 ring-white focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400/70">
+                <img src="logo.jpeg" alt="East Champaran Fencing Association" class="h-12 w-auto object-contain object-left sm:h-14 md:h-16 max-w-[min(calc(100vw-6rem),380px)] sm:max-w-[420px] md:max-w-[min(520px,calc(100vw-22rem))]" width="520" height="173" decoding="async">
+            </a>
+            <button type="button" id="ecfa-nav-toggle" class="rounded-lg bg-slate-800 p-2 text-white hover:bg-slate-700 md:hidden" aria-expanded="false" aria-controls="ecfa-nav-panel" aria-label="Open menu">☰</button>
+            <div id="ecfa-nav-panel" class="hidden w-full md:block md:w-auto">
+                <ul class="flex flex-col gap-1 border-t border-slate-800 pt-4 text-sm font-medium md:flex-row md:items-center md:gap-5 md:border-0 md:pt-0">
+                    <li><a href="index.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Home</a></li>
+                    <li><a href="about-us.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">About Us</a></li>
+                    <li><a href="members-players.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Members &amp; Players</a></li>
+                    <li><a href="events.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Events</a></li>
+                    <li><a href="achivements.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Achievements</a></li>
+                    <li><a href="gallery.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Gallery</a></li>
+                    <li><a href="news.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">News</a></li>
+                    <li><a href="contact-us.html" class="block rounded-lg px-3 py-2 text-amber-300 md:inline md:border-b-2 md:border-amber-300 md:pb-1 md:pt-0">Contact</a></li>
+                    <li><a href="learn.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Learn</a></li>
+                    <li><a href="player-login.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Player Login</a></li>
+                    <li class="md:ml-2"><a href="admin-login.html" data-ecfa-admin-link class="block rounded-lg bg-amber-400 px-4 py-2.5 text-center font-semibold text-slate-900 hover:bg-amber-300 md:inline-block">Admin Login</a></li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <section class="page-header">
-        <h1>Contact Us</h1>
-        <p>Get In Touch With ECFA</p>
+    <section class="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 py-16 text-white md:py-20">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(251,191,36,0.12),transparent_45%)]"></div>
+        <div class="relative mx-auto max-w-6xl px-4 text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight md:text-5xl">Contact Us</h1>
+            <p class="mt-3 text-lg text-slate-200">We would love to hear from you</p>
+        </div>
     </section>
 
-    <section class="contact-main container">
-        <div class="contact-info-section">
-            <h2>Contact Information</h2>
-            <div class="contact-info-cards">
-                <div class="contact-info-card">
-                    <h4>📍 Address</h4>
-                    <p>East Champaran Sports Complex</p>
-                    <p>Motihari, East Champaran</p>
-                    <p>Bihar 845401, India</p>
-                </div>
-                <div class="contact-info-card">
-                    <h4>📞 Phone</h4>
-                    <p>+91 9876543210</p>
-                    <p>+91 8765432109</p>
-                    <p>Mon - Fri: 10 AM - 6 PM</p>
-                </div>
-                <div class="contact-info-card">
-                    <h4>✉️ Email</h4>
-                    <p>info@ecfa.org</p>
-                    <p>registration@ecfa.org</p>
-                    <p>support@ecfa.org</p>
-                </div>
-                <div class="contact-info-card">
-                    <h4>🕐 Working Hours</h4>
-                    <p>Monday - Friday: 10 AM - 6 PM</p>
-                    <p>Saturday: 9 AM - 4 PM</p>
-                    <p>Sunday: Closed</p>
-                </div>
+    <section class="mx-auto max-w-6xl px-4 py-16">
+        <h2 class="text-2xl font-bold text-slate-900">Contact Information</h2>
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md transition hover:border-blue-200 hover:shadow-lg">
+                <h3 class="font-bold text-slate-900">📍 Address</h3>
+                <p class="mt-3 text-sm text-slate-600">East Champaran Sports Complex<br>Motihari, East Champaran<br>Bihar 845401, India</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md transition hover:border-blue-200 hover:shadow-lg">
+                <h3 class="font-bold text-slate-900">📞 Phone</h3>
+                <p class="mt-3 text-sm text-slate-600">+91 9772960842<br>
+                <p class="mt-2 text-xs text-slate-500">Mon–Fri: 10 AM – 6 PM</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md transition hover:border-blue-200 hover:shadow-lg">
+                <h3 class="font-bold text-slate-900">✉️ Email</h3>
+                <p class="mt-3 text-sm text-slate-600">ecfamotihari@gmail.com
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md transition hover:border-blue-200 hover:shadow-lg">
+                <h3 class="font-bold text-slate-900">🕐 Hours</h3>
+                <p class="mt-3 text-sm text-slate-600">Mon–Fri: 10 AM – 6 PM<br>Sat: 9 AM – 4 PM<br>Sun: Closed</p>
             </div>
         </div>
 
-        <!-- Google Map -->
-        <div class="map-section">
-            <h2>Location</h2>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.5945262584404!2d84.67891212346824!3d25.98971827150869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f3b6c6c6c6c6c7%3A0x1234567890abcdef!2sEast%20Champaran!5e0!3m2!1sen!2sin!4v1234567890123" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="mt-16">
+            <h2 class="text-2xl font-bold text-slate-900">Location</h2>
+            <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 shadow-lg">
+                <iframe class="h-[400px] w-full" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.5945262584404!2d84.67891212346824!3d25.98971827150869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f3b6c6c6c6c6c7%3A0x1234567890abcdef!2sEast%20Champaran!5e0!3m2!1sen!2sin!4v1234567890123" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
 
-        <!-- Contact Form -->
-        <div class="contact-form-section">
-            <h2>Send us a Message</h2>
-            <form id="contactForm" class="contact-form" method="POST" action="http://localhost:8000/api/contact">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="cName">Name *</label>
-                        <input type="text" id="cName" name="name" required>
+        <div class="mt-16 max-w-3xl">
+            <h2 class="text-2xl font-bold text-slate-900">Send us a message</h2>
+            <form id="contactForm" class="mt-8 space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-lg md:p-8" method="POST" action="http://localhost:8000/api/contact">
+                <div class="grid gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="cName" class="block text-sm font-semibold text-slate-700">Name *</label>
+                        <input type="text" id="cName" name="name" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
                     </div>
-                    <div class="form-group">
-                        <label for="cEmail">Email *</label>
-                        <input type="email" id="cEmail" name="email" required>
+                    <div>
+                        <label for="cEmail" class="block text-sm font-semibold text-slate-700">Email *</label>
+                        <input type="email" id="cEmail" name="email" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="cPhone">Phone Number *</label>
-                    <input type="tel" id="cPhone" name="phone" required>
+                <div>
+                    <label for="cPhone" class="block text-sm font-semibold text-slate-700">Phone *</label>
+                    <input type="tel" id="cPhone" name="phone" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
                 </div>
-
-                <div class="form-group">
-                    <label for="cSubject">Subject *</label>
-                    <input type="text" id="cSubject" name="subject" required>
+                <div>
+                    <label for="cSubject" class="block text-sm font-semibold text-slate-700">Subject *</label>
+                    <input type="text" id="cSubject" name="subject" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
                 </div>
-
-                <div class="form-group">
-                    <label for="cMessage">Message *</label>
-                    <textarea id="cMessage" name="message" rows="6" required></textarea>
+                <div>
+                    <label for="cMessage" class="block text-sm font-semibold text-slate-700">Message *</label>
+                    <textarea id="cMessage" name="message" rows="6" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"></textarea>
                 </div>
-
-                <div class="form-group checkbox">
-                    <label for="cAgree">
-                        <input type="checkbox" id="cAgree" name="agree" required>
-                        I agree to the privacy policy
-                    </label>
-                </div>
-
-                <button type="submit" class="btn-submit">Send Message</button>
+                <label class="flex cursor-pointer items-start gap-3 text-sm text-slate-700">
+                    <input type="checkbox" id="cAgree" name="agree" required class="mt-1 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    <span>I agree to the privacy policy *</span>
+                </label>
+                <button type="submit" class="rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-3 font-semibold text-white shadow-lg transition hover:opacity-90">Send Message</button>
             </form>
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About ECFA</h3>
-                <p>East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
+    <footer class="bg-slate-900 py-14 text-slate-100">
+        <div class="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-3">
+            <div>
+                <h3 class="text-xl font-bold">About ECFA</h3>
+                <p class="mt-3 text-slate-300">East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
             </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <a href="index.html">Home</a>
-                <a href="members-players.html">Players</a>
-                <a href="events.html">Events</a>
-                <a href="gallery.html">Gallery</a>
+            <div>
+                <h3 class="text-xl font-bold">Quick Links</h3>
+                <div class="mt-3 flex flex-col gap-2 text-slate-300">
+                    <a href="index.html" class="hover:text-amber-300">Home</a>
+                    <a href="members-players.html" class="hover:text-amber-300">Players</a>
+                    <a href="events.html" class="hover:text-amber-300">Events</a>
+                    <a href="gallery.html" class="hover:text-amber-300">Gallery</a>
+                </div>
             </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>📍 East Champaran, Bihar, India</p>
-                <p>📞 +91-XXXXXXXXXX</p>
-                <p>✉️ info@ecfa.org</p>
+            <div>
+                <h3 class="text-xl font-bold">Contact</h3>
+                <p class="mt-3 text-slate-300">📍 East Champaran, Bihar, India</p>
+                <p class="text-slate-300">📞 9772960842</p>
+                <p class="text-slate-300">✉️ ecfamotihari@gmail.com</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
-        </div>
+        <div class="mt-10 border-t border-slate-800 pt-5 text-center text-sm text-slate-400">&copy; 2026 East Champaran Fencing Association. All rights reserved.</div>
     </footer>
 
     <script src="js/script.js"></script>

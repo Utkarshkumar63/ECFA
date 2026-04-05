@@ -2,18 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Player extends Model
+class Player extends Authenticatable
 {
+    use HasApiTokens, HasFactory, Notifiable;
+
     protected $fillable = [
         'name',
         'date_of_birth',
         'gender',
         'email',
         'phone',
+        'password',
         'address',
         'category',
         'event_type',
@@ -24,24 +30,24 @@ class Player extends Model
         'is_active',
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected $casts = [
         'date_of_birth' => 'date',
         'is_active' => 'boolean',
+        'password' => 'hashed',
     ];
 
     protected $appends = ['age'];
 
-    /**
-     * Get the achievements for the player.
-     */
     public function achievements(): HasMany
     {
         return $this->hasMany(Achievement::class);
     }
 
-    /**
-     * Get the events the player has participated in.
-     */
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'event_participants')
@@ -49,9 +55,6 @@ class Player extends Model
             ->withTimestamps();
     }
 
-    /**
-     * Get player's age calculated from DOB
-     */
     public function getAgeAttribute(): int
     {
         return $this->date_of_birth->age;

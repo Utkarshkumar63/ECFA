@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Materials (Admin) - ECFA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } };</script>
+</head>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-900 antialiased">
+    <nav class="sticky top-0 z-50 border-b border-slate-800 bg-slate-900 text-white shadow-lg">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+            <a href="admin-dashboard.html" class="text-lg font-extrabold text-amber-300">← Dashboard</a>
+            <a href="index.html" class="text-sm text-slate-300 hover:text-amber-200">View site</a>
+        </div>
+    </nav>
+
+    <main class="mx-auto max-w-6xl px-4 py-10">
+        <h1 class="text-2xl font-bold">Upload learning PDFs</h1>
+        <p class="mt-1 text-slate-600">Link notes to a weapon (Foil / Épée / Sabre) and optionally to an event. Players see only published files after login.</p>
+
+        <form id="uploadForm" class="mt-8 grid gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-md md:grid-cols-2">
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold">PDF file *</label>
+                <input type="file" id="pdfFile" name="file" accept=".pdf,application/pdf" required class="mt-1 w-full text-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold">Title *</label>
+                <input type="text" id="title" name="title" required placeholder="e.g. Rules, Techniques" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold">Weapon *</label>
+                <select id="weapon" name="weapon" required class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+                    <option value="Foil">Foil</option>
+                    <option value="Epee">Épée (Epee)</option>
+                    <option value="Sabre">Sabre</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold">Event (optional)</label>
+                <select id="event_id" name="event_id" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+                    <option value="">— Not tied to an event —</option>
+                </select>
+            </div>
+            <div class="md:col-span-2 flex items-center gap-2">
+                <input type="checkbox" id="is_published" name="is_published" checked class="rounded border-slate-300">
+                <label for="is_published" class="text-sm">Published (visible to players)</label>
+            </div>
+            <div class="md:col-span-2">
+                <button type="submit" class="rounded-full bg-blue-600 px-8 py-3 font-semibold text-white hover:bg-blue-500">Upload</button>
+                <span id="uploadStatus" class="ml-4 text-sm text-slate-600"></span>
+            </div>
+        </form>
+
+        <h2 class="mt-12 text-xl font-bold">Uploaded materials</h2>
+        <div id="list" class="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow"></div>
+    </main>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        async function checkAdmin() {
+            if (!ApiClient.getToken()) {
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+            try {
+                await ApiClient.getCurrentUser();
+                return true;
+            } catch (_) {
+                localStorage.removeItem('ecfa_token');
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+        }
+
+        async function loadEvents() {
+            const events = await ApiClient.getEvents();
+            const sel = document.getElementById('event_id');
+            (Array.isArray(events) ? events : []).forEach(ev => {
+                const o = document.createElement('option');
+                o.value = ev.id;
+                o.textContent = (ev.title || ev.name || 'Event') + (ev.event_date ? ' — ' + ev.event_date : '');
+                sel.appendChild(o);
+            });
+        }
+
+        async function loadList() {
+            const box = document.getElementById('list');
+            try {
+                const rows = await ApiClient.getLearnMaterials({}, false);
+                const list = Array.isArray(rows) ? rows : [];
+                if (list.length === 0) {
+                    box.innerHTML = '<p class="p-6 text-slate-600">No files yet.</p>';
+                    return;
+                }
+                box.innerHTML = `
+                    <table class="w-full text-left text-sm">
+                        <thead class="border-b bg-slate-50 font-semibold">
+                            <tr><th class="p-3">Weapon</th><th class="p-3">Title</th><th class="p-3">Event</th><th class="p-3">File</th><th class="p-3"></th></tr>
+                        </thead>
+                        <tbody>
+                            ${list.map(m => `
+                                <tr class="border-b border-slate-100">
+                                    <td class="p-3">${m.weapon}</td>
+                                    <td class="p-3">${m.title}</td>
+                                    <td class="p-3 text-slate-600">${m.event ? m.event.title : '—'}</td>
+                                    <td class="p-3 text-xs text-slate-500">${m.original_filename}</td>
+                                    <td class="p-3">
+                                        <button type="button" data-del="${m.id}" class="text-red-600 hover:underline">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>`;
+                box.querySelectorAll('[data-del]').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        if (!confirm('Delete this file?')) return;
+                        try {
+                            await ApiClient.deleteLearnMaterial(btn.dataset.del);
+                            loadList();
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    });
+                });
+            } catch (e) {
+                box.innerHTML = '<p class="p-6 text-red-600">' + e.message + '</p>';
+            }
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const st = document.getElementById('uploadStatus');
+            st.textContent = 'Uploading…';
+            const fd = new FormData();
+            fd.append('file', document.getElementById('pdfFile').files[0]);
+            fd.append('title', document.getElementById('title').value);
+            fd.append('weapon', document.getElementById('weapon').value);
+            const eid = document.getElementById('event_id').value;
+            if (eid) fd.append('event_id', eid);
+            fd.append('is_published', document.getElementById('is_published').checked ? '1' : '0');
+            try {
+                await ApiClient.uploadLearnMaterial(fd);
+                st.textContent = 'Uploaded.';
+                e.target.reset();
+                document.getElementById('is_published').checked = true;
+                loadList();
+            } catch (err) {
+                st.textContent = err.message || 'Failed';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!await checkAdmin()) return;
+            await loadEvents();
+            await loadList();
+        });
+    </script>
+</body>
+</html>

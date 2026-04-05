@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Registration;
 use App\Models\Event;
-use Illuminate\Http\Request;
+use App\Models\Player;
+use App\Models\Registration;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class RegistrationController extends Controller
 {
@@ -140,21 +142,43 @@ class RegistrationController extends Controller
      */
     public function approve(Request $request, $id): JsonResponse
     {
+        $request->validate([
+            'player_password' => 'nullable|string|min:6|max:100',
+        ]);
+
         $registration = Registration::find($id);
-        
-        if (!$registration) {
+
+        if (! $registration) {
             return response()->json([
                 'success' => false,
-                'message' => 'Registration not found'
+                'message' => 'Registration not found',
             ], 404);
         }
 
         if ($registration->status !== 'Pending') {
             return response()->json([
                 'success' => false,
-                'message' => 'Registration is already processed'
+                'message' => 'Registration is already processed',
             ], 400);
         }
+
+        $plainPassword = $request->input('player_password', 'ecfaPlayer1');
+
+        Player::updateOrCreate(
+            ['email' => $registration->email],
+            [
+                'name' => $registration->name,
+                'date_of_birth' => $registration->date_of_birth,
+                'gender' => $registration->gender,
+                'phone' => $registration->phone,
+                'password' => Hash::make($plainPassword),
+                'address' => $registration->address,
+                'category' => $registration->category,
+                'event_type' => $registration->event_type,
+                'bio' => '',
+                'is_active' => true,
+            ]
+        );
 
         $registration->update([
             'status' => 'Approved',
@@ -164,8 +188,9 @@ class RegistrationController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Registration approved successfully',
-            'data' => $registration
+            'message' => 'Registration approved. Player can log in with this email and the password you set (default: ecfaPlayer1 if omitted).',
+            'data' => $registration->fresh(),
+            'player_login_hint' => 'Share password securely with the player.',
         ]);
     }
 

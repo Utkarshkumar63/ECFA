@@ -58,6 +58,11 @@ class Event extends Model
         return $this->hasMany(Registration::class);
     }
 
+    public function learnMaterials(): HasMany
+    {
+        return $this->hasMany(LearnMaterial::class);
+    }
+
     /**
      * Scope to get only upcoming events
      */

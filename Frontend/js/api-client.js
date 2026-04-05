@@ -10,37 +10,41 @@
 const API_BASE_URL = 'http://localhost:8001/api';
 
 class ApiClient {
-  /**
-   * Get token from localStorage
-   */
   static getToken() {
     return localStorage.getItem('ecfa_token');
   }
 
-  /**
-   * Set token in localStorage
-   */
   static setToken(token) {
     localStorage.setItem('ecfa_token', token);
   }
 
-  /**
-   * Remove token from localStorage
-   */
   static clearToken() {
     localStorage.removeItem('ecfa_token');
   }
 
+  static getPlayerToken() {
+    return localStorage.getItem('ecfa_player_token');
+  }
+
+  static setPlayerToken(token) {
+    localStorage.setItem('ecfa_player_token', token);
+  }
+
+  static clearPlayerToken() {
+    localStorage.removeItem('ecfa_player_token');
+  }
+
   /**
-   * Get authorization headers
+   * @param {'admin'|'player'} role
    */
-  static getHeaders(needsAuth = false) {
+  static getHeaders(needsAuth = false, role = 'admin') {
     const headers = {
       'Content-Type': 'application/json',
+      Accept: 'application/json',
     };
 
     if (needsAuth) {
-      const token = this.getToken();
+      const token = role === 'player' ? this.getPlayerToken() : this.getToken();
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
@@ -49,18 +53,22 @@ class ApiClient {
     return headers;
   }
 
-  /**
-   * Make API request
-   */
-  static async request(endpoint, method = 'GET', data = null, needsAuth = false) {
+  static unwrap(result) {
+    if (result && result.success === true && result.data !== undefined) {
+      return result.data;
+    }
+    return result;
+  }
+
+  static async request(endpoint, method = 'GET', data = null, needsAuth = false, role = 'admin') {
     try {
       const url = `${API_BASE_URL}${endpoint}`;
       const options = {
         method,
-        headers: this.getHeaders(needsAuth),
+        headers: this.getHeaders(needsAuth, role),
       };
 
-      if (data) {
+      if (data && method !== 'GET') {
         options.body = JSON.stringify(data);
       }
 
@@ -107,7 +115,8 @@ class ApiClient {
    * Get current user
    */
   static async getCurrentUser() {
-    return this.request('/auth/me', 'GET', null, true);
+    const r = await this.request('/auth/me', 'GET', null, true, 'admin');
+    return this.unwrap(r);
   }
 
   // ==================== PLAYERS ====================
@@ -116,7 +125,8 @@ class ApiClient {
    * Get all players
    */
   static async getPlayers() {
-    return this.request('/players');
+    const r = await this.request('/players');
+    return this.unwrap(r);
   }
 
   /**
@@ -167,7 +177,8 @@ class ApiClient {
    * Get all events
    */
   static async getEvents() {
-    return this.request('/events');
+    const r = await this.request('/events');
+    return this.unwrap(r);
   }
 
   /**
@@ -218,7 +229,8 @@ class ApiClient {
    * Get all achievements
    */
   static async getAchievements() {
-    return this.request('/achievements');
+    const r = await this.request('/achievements');
+    return this.unwrap(r);
   }
 
   /**
@@ -269,7 +281,8 @@ class ApiClient {
    * Get all news
    */
   static async getNews() {
-    return this.request('/news');
+    const r = await this.request('/news');
+    return this.unwrap(r);
   }
 
   /**
@@ -313,7 +326,8 @@ class ApiClient {
    * Get all gallery items
    */
   static async getGallery() {
-    return this.request('/gallery');
+    const r = await this.request('/gallery');
+    return this.unwrap(r);
   }
 
   /**
@@ -378,7 +392,12 @@ class ApiClient {
    * Get pending registrations (Admin)
    */
   static async getPendingRegistrations() {
-    return this.request('/registrations/pending', 'GET', null, true);
+    const r = await this.request('/registrations/pending', 'GET', null, true, 'admin');
+    return this.unwrap(r);
+  }
+
+  static pendingRegistrations() {
+    return this.getPendingRegistrations();
   }
 
   /**
@@ -398,8 +417,9 @@ class ApiClient {
   /**
    * Approve registration (Admin)
    */
-  static async approveRegistration(id) {
-    return this.request(`/registrations/${id}/approve`, 'PUT', {}, true);
+  static async approveRegistration(id, playerPassword) {
+    const body = playerPassword ? { player_password: playerPassword } : {};
+    return this.request(`/registrations/${id}/approve`, 'PUT', body, true, 'admin');
   }
 
   /**
@@ -408,7 +428,7 @@ class ApiClient {
   static async rejectRegistration(id, rejectionReason) {
     return this.request(`/registrations/${id}/reject`, 'PUT', {
       rejection_reason: rejectionReason,
-    }, true);
+    }, true, 'admin');
   }
 
   /**
@@ -440,6 +460,83 @@ class ApiClient {
   static async getRecentActivities() {
     return this.request('/dashboard/recent-activities', 'GET', null, true);
   }
+
+  // ==================== PLAYER AUTH ====================
+
+  static async playerLogin(email, password) {
+    const result = await this.request('/auth/player/login', 'POST', { email, password });
+    if (result.success && result.token) {
+      this.setPlayerToken(result.token);
+    }
+    return result;
+  }
+
+  static async playerLogout() {
+    try {
+      await this.request('/auth/player/logout', 'POST', null, true, 'player');
+    } finally {
+      this.clearPlayerToken();
+    }
+  }
+
+  static async getCurrentPlayer() {
+    const r = await this.request('/auth/player/me', 'GET', null, true, 'player');
+    return this.unwrap(r);
+  }
+
+  // ==================== LEARN (PDFs by weapon / event) ====================
+
+  static async getLearnMaterials(params, asPlayer = true) {
+    const role = asPlayer ? 'player' : 'admin';
+    const q = params && Object.keys(params).length
+      ? '?' + new URLSearchParams(params).toString()
+      : '';
+    const r = await this.request(`/learn-materials${q}`, 'GET', null, true, role);
+    return this.unwrap(r);
+  }
+
+  static async uploadLearnMaterial(formData) {
+    const token = this.getToken();
+    const res = await fetch(`${API_BASE_URL}/learn-materials`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+      body: formData,
+    });
+    const result = await res.json();
+    if (!res.ok) {
+      throw new Error(result.message || 'Upload failed');
+    }
+    return result;
+  }
+
+  static async deleteLearnMaterial(id) {
+    return this.request(`/learn-materials/${id}`, 'DELETE', null, true, 'admin');
+  }
+
+  static async downloadLearnMaterial(id, filename, asPlayer = true) {
+    const token = asPlayer ? this.getPlayerToken() : this.getToken();
+    const res = await fetch(`${API_BASE_URL}/learn-materials/${id}/download`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Download failed');
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'document.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
 }
 
-export default ApiClient;
+if (typeof window !== 'undefined') {
+  window.ApiClient = ApiClient;
+}

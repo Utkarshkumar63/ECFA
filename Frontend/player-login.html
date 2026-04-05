@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Login - ECFA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } };</script>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <nav class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-900/95 text-white shadow-xl backdrop-blur">
+        <div class="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+            <a href="index.html" class="flex shrink-0 items-center rounded-xl bg-white px-3 py-2.5 shadow-lg ring-2 ring-white">
+                <img src="logo.jpeg" alt="ECFA" class="h-10 w-auto max-w-[280px] object-contain md:h-11" width="320" height="107" decoding="async">
+            </a>
+            <button type="button" id="ecfa-nav-toggle" class="rounded-lg bg-slate-800 p-2 md:hidden" aria-label="Menu">☰</button>
+            <div id="ecfa-nav-panel" class="hidden w-full md:block md:w-auto">
+                <ul class="flex flex-col gap-1 border-t border-slate-800 pt-4 text-sm font-medium md:flex-row md:items-center md:gap-5 md:border-0 md:pt-0">
+                    <li><a href="index.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 md:inline">Home</a></li>
+                    <li><a href="learn.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 md:inline">Learn</a></li>
+                    <li><a href="player-login.html" class="block rounded-lg px-3 py-2 text-amber-300 md:inline md:border-b-2 md:border-amber-300 md:pb-1">Player Login</a></li>
+                    <li class="md:ml-2"><a href="admin-login.html" class="block rounded-lg bg-amber-400 px-4 py-2.5 text-center font-semibold text-slate-900 md:inline-block">Admin</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="mx-auto flex min-h-[calc(100dvh-5rem)] max-w-md flex-col justify-center px-4 py-12">
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl">
+            <h1 class="text-center text-2xl font-extrabold text-slate-900">Player login</h1>
+            <p class="mt-2 text-center text-sm text-slate-600">Use the email and password set when your registration was approved.</p>
+            <form id="playerLoginForm" class="mt-8 space-y-5">
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-slate-700">Email</label>
+                    <input type="email" id="email" required class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-slate-700">Password</label>
+                    <input type="password" id="password" required class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                </div>
+                <div id="alertBox" class="hidden rounded-xl border px-4 py-3 text-sm font-medium"></div>
+                <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 font-semibold text-white shadow-lg hover:opacity-90">Sign in</button>
+            </form>
+            <p class="mt-6 text-center text-xs text-slate-500">New player? <a href="events.html" class="font-semibold text-blue-600 hover:underline">Register for an event</a></p>
+        </div>
+    </main>
+
+    <script src="js/api-client.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.getElementById('playerLoginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const alertBox = document.getElementById('alertBox');
+            function show(msg, ok) {
+                alertBox.textContent = msg;
+                alertBox.classList.remove('hidden', 'border-red-200', 'bg-red-50', 'text-red-900', 'border-emerald-200', 'bg-emerald-50', 'text-emerald-900');
+                alertBox.classList.add(ok ? 'border-emerald-200' : 'border-red-200', ok ? 'bg-emerald-50' : 'bg-red-50', ok ? 'text-emerald-900' : 'text-red-900');
+                alertBox.classList.remove('hidden');
+            }
+            try {
+                alertBox.classList.add('hidden');
+                const res = await ApiClient.playerLogin(document.getElementById('email').value, document.getElementById('password').value);
+                if (res.success) {
+                    show('Success! Redirecting…', true);
+                    const next = new URLSearchParams(location.search).get('redirect') || 'learn.html';
+                    setTimeout(() => { window.location.href = next; }, 600);
+                } else {
+                    show(res.message || 'Login failed', false);
+                }
+            } catch (err) {
+                show(err.message || 'Login failed', false);
+            }
+        });
+    </script>
+</body>
+</html>

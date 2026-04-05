@@ -4,79 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - ECFA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] } } } };
+    </script>
 </head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">🤺 ECFA</a>
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about-us.html">About Us</a></li>
-                <li><a href="members-players.html">Members & Players</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="achivements.html">Achievements</a></li>
-                <li><a href="gallery.html" class="active">Gallery</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="contact-us.html">Contact</a></li>
-                <li class="admin-login"><a href="admin-login.html">Admin Login</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <nav class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-900/95 text-white shadow-xl backdrop-blur">
+        <div class="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+            <a href="index.html" class="flex shrink-0 items-center rounded-xl bg-white px-3 py-2.5 shadow-lg shadow-black/35 ring-2 ring-white focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400/70">
+                <img src="logo.jpeg" alt="East Champaran Fencing Association" class="h-12 w-auto object-contain object-left sm:h-14 md:h-16 max-w-[min(calc(100vw-6rem),380px)] sm:max-w-[420px] md:max-w-[min(520px,calc(100vw-22rem))]" width="520" height="173" decoding="async">
+            </a>
+            <button type="button" id="ecfa-nav-toggle" class="rounded-lg bg-slate-800 p-2 text-white hover:bg-slate-700 md:hidden" aria-expanded="false" aria-controls="ecfa-nav-panel" aria-label="Open menu">☰</button>
+            <div id="ecfa-nav-panel" class="hidden w-full md:block md:w-auto">
+                <ul class="flex flex-col gap-1 border-t border-slate-800 pt-4 text-sm font-medium md:flex-row md:items-center md:gap-5 md:border-0 md:pt-0">
+                    <li><a href="index.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Home</a></li>
+                    <li><a href="about-us.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">About Us</a></li>
+                    <li><a href="members-players.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Members &amp; Players</a></li>
+                    <li><a href="events.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Events</a></li>
+                    <li><a href="achivements.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Achievements</a></li>
+                    <li><a href="gallery.html" class="block rounded-lg px-3 py-2 text-amber-300 md:inline md:border-b-2 md:border-amber-300 md:pb-1 md:pt-0">Gallery</a></li>
+                    <li><a href="news.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">News</a></li>
+                    <li><a href="contact-us.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Contact</a></li>
+                    <li><a href="learn.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Learn</a></li>
+                    <li><a href="player-login.html" class="block rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-200 md:inline md:hover:bg-transparent">Player Login</a></li>
+                    <li class="md:ml-2"><a href="admin-login.html" data-ecfa-admin-link class="block rounded-lg bg-amber-400 px-4 py-2.5 text-center font-semibold text-slate-900 hover:bg-amber-300 md:inline-block">Admin Login</a></li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Banner -->
-    <section class="hero-banner" style="height: 300px;">
-        <div class="hero-content">
-            <h2>Gallery</h2>
-            <p>Images & Videos from Our Events</p>
+    <section class="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 py-16 text-white md:py-24">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_60%,rgba(251,191,36,0.15),transparent_45%)]"></div>
+        <div class="relative mx-auto max-w-6xl px-4 text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight md:text-5xl">Gallery</h1>
+            <p class="mt-3 text-lg text-slate-200">Moments from our events</p>
         </div>
     </section>
 
-    <!-- Lightbox for Gallery -->
-    <div id="lightbox">
-        <button class="lightbox-close" onclick="closeLightbox()">×</button>
-        <img id="lightboxImage" src="" alt="">
+    <div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/90 p-6" role="dialog" aria-modal="true" aria-label="Image preview">
+        <button type="button" class="absolute right-6 top-6 rounded-full bg-white/10 px-4 py-2 text-2xl font-light text-white hover:bg-white/20" onclick="closeLightbox()" aria-label="Close">&times;</button>
+        <img id="lightboxImage" src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain shadow-2xl">
     </div>
 
-    <!-- Gallery -->
-    <section>
-        <div class="container">
-            <h2>Gallery Items</h2>
-            <div id="gallery-container" class="gallery-grid"></div>
-        </div>
+    <section class="mx-auto max-w-6xl px-4 py-12">
+        <h2 class="text-2xl font-bold text-slate-900">Gallery</h2>
+        <div id="gallery-container" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About ECFA</h3>
-                <p>East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
+    <footer class="bg-slate-900 py-14 text-slate-100">
+        <div class="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-3">
+            <div>
+                <h3 class="text-xl font-bold">About ECFA</h3>
+                <p class="mt-3 text-slate-300">East Champaran Fencing Association dedicated to promoting fencing excellence in the region.</p>
             </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <a href="about-us.html">About Us</a>
-                <a href="members-players.html">Players</a>
-                <a href="events.html">Events</a>
-                <a href="gallery.html">Gallery</a>
+            <div>
+                <h3 class="text-xl font-bold">Quick Links</h3>
+                <div class="mt-3 flex flex-col gap-2 text-slate-300">
+                    <a href="about-us.html" class="hover:text-amber-300">About Us</a>
+                    <a href="members-players.html" class="hover:text-amber-300">Players</a>
+                    <a href="events.html" class="hover:text-amber-300">Events</a>
+                    <a href="gallery.html" class="hover:text-amber-300">Gallery</a>
+                </div>
             </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>📍 East Champaran, Bihar, India</p>
-                <p>📞 +91-XXXXXXXXXX</p>
-                <p>✉️ info@ecfa.org</p>
+            <div>
+                <h3 class="text-xl font-bold">Contact</h3>
+                <p class="mt-3 text-slate-300">📍 East Champaran, Bihar, India</p>
+                <p class="text-slate-300">📞 9772960842</p>
+                <p class="text-slate-300">✉️ ecfamotihari@gmail.com</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 East Champaran Fencing Association. All rights reserved.</p>
-        </div>
+        <div class="mt-10 border-t border-slate-800 pt-5 text-center text-sm text-slate-400">&copy; 2026 East Champaran Fencing Association. All rights reserved.</div>
     </footer>
 
     <script src="js/api-client.js"></script>
@@ -86,22 +87,20 @@
             try {
                 const container = document.getElementById('gallery-container');
                 showLoading(container);
-                
                 const gallery = await ApiClient.getGallery();
-                
                 if (gallery.length === 0) {
                     emptyStateMessage(container, 'No gallery items available');
                 } else {
                     container.innerHTML = gallery.map(item => `
-                        <div class="card" onclick="openLightbox('${item.url}')">
-                            <div class="card-image" style="cursor: pointer;">
-                                <img src="${item.url}" alt="${item.title}">
+                        <article class="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition hover:border-blue-200 hover:shadow-xl" onclick="openLightbox('${item.url}')">
+                            <div class="aspect-[4/3] overflow-hidden bg-slate-200">
+                                <img src="${item.url}" alt="${item.title}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
                             </div>
-                            <div class="card-content">
-                                <h3 class="card-title">${item.title}</h3>
-                                <p class="card-text">${item.description}</p>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-slate-900">${item.title}</h3>
+                                <p class="mt-1 text-sm text-slate-600">${item.description}</p>
                             </div>
-                        </div>
+                        </article>
                     `).join('');
                 }
             } catch (error) {
@@ -110,7 +109,6 @@
             }
         }
 
-        // Load gallery on page load
         document.addEventListener('DOMContentLoaded', loadGallery);
     </script>
 </body>
