@@ -2,83 +2,46 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\LearnMaterial;
+use App\Models\User;
 
 class Event extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'description',
         'event_date',
-        'venue',
-        'venue_address',
-        'start_time',
-        'end_time',
-        'status',
-        'max_participants',
-        'rules',
-        'event_image',
-        'is_registration_open',
-        'registration_end_date',
-    ];
+        'location',
+        'image',
+        'status'
 
-    protected $casts = [
-        'event_date' => 'date',
-        'registration_end_date' => 'date',
-        'start_time' => 'time',
-        'end_time' => 'time',
-        'is_registration_open' => 'boolean',
     ];
 
     /**
-     * Get the participants for the event.
+     * Relationship: An event has many learning materials.
      */
-    public function participants(): BelongsToMany
-    {
-        return $this->belongsToMany(Player::class, 'event_participants')
-            ->withPivot('status', 'position')
-            ->withTimestamps();
-    }
-
-    /**
-     * Get the gallery items for this event.
-     */
-    public function galleryItems(): HasMany
-    {
-        return $this->hasMany(Gallery::class);
-    }
-
-    /**
-     * Get the registrations for this event.
-     */
-    public function registrations(): HasMany
-    {
-        return $this->hasMany(Registration::class);
-    }
-
-    public function learnMaterials(): HasMany
+    public function materials(): HasMany
     {
         return $this->hasMany(LearnMaterial::class);
     }
 
-    /**
-     * Scope to get only upcoming events
-     */
-    public function scopeUpcoming($query)
-    {
-        return $query->where('status', 'Upcoming')
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date', 'asc');
-    }
+ public function userCertificate()
+{
+    return $this->hasOne(Certificate::class, 'event_name', 'title')
+                ->where('user_id', auth()->id());
+}
+public function athletes()
+{
+    // FIX: added 'attendance_status' and 'absent_reason' to withPivot
+    return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id')
+                ->withPivot('status', 'attendance_status', 'absent_reason')
+                ->withTimestamps();
+}
 
-    /**
-     * Scope to get completed events
-     */
-    public function scopeCompleted($query)
-    {
-        return $query->where('status', 'Completed')
-            ->orderBy('event_date', 'desc');
-    }
 }

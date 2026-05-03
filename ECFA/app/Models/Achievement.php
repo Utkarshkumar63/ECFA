@@ -2,31 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Achievement extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'player_id',
         'title',
         'description',
-        'medal',
-        'level',
-        'achievement_date',
+        'medal_type', // Gold, Silver, Bronze
+        'level',      // National, State, District
         'event_name',
-        'certificate_image',
-    ];
-
-    protected $casts = [
-        'achievement_date' => 'date',
+        'image',      // Cloudinary URL
+        'user_id',
+        'achievement_date'
     ];
 
     /**
-     * Get the player that owns this achievement.
+     * Relationship: An achievement belongs to an athlete.
      */
-    public function player(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Player::class);
+        return $this->belongsTo(User::class);
     }
 }
